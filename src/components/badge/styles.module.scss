@@ -1,0 +1,142 @@
+@charset "UTF-8";
+@import '../../styles/colors.scss';
+
+.overlay {
+  height: 100vh;
+  width: 1000vw;
+  background: $overlay;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  position: relative;
+
+  background-image: url('../../assets/background.svg');
+  background-position: 50%;
+  background-repeat: no-repeat;
+
+  color: $gray200;
+
+  width: 100vw;
+  height: 98vh;
+  border-radius: 4px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & > img[alt=flag] {
+    position: absolute;
+    background: linear-gradient(135deg, $orange, $yellow);
+
+    border-bottom: 5px solid $black900;
+    border-radius: 4px;
+
+    top: 0;
+    transform: translateY(-88%);
+
+    @media(max-width: 1023px) {
+      display: none;
+    }
+  }
+
+  @media(min-width: 1024px) {
+    background-position: 50% 45%;
+    width: 358px;
+    height: 540px;
+  }
+}
+
+.content {
+
+  width: 244px;
+  height: 477px;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  & > div[id=profile] {
+    position: relative;
+
+    & > img {
+      width: 160px;
+      height: 184px;
+
+      &[id=avatar] {
+        border-radius: 999px;
+      }
+  
+      &[alt=seal] {
+        height: 80px;
+        width: 80px;
+        position: absolute;
+        transform: translateX(-30%) translateY(-30%);
+      }
+    }
+  }
+
+  & > h1 {
+    font-size: 1.25rem;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+
+    color: $gray200;
+
+    & > a {
+      font-size: 1rem;
+      color: $gray300;
+
+      display: flex;
+      gap: 0.8rem;
+
+      & > img {
+        height: 16px;
+        width: 16px;
+      }
+    }
+  }
+
+  & > p {
+    text-align: center;
+    color: $gray300;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+  }
+
+  & > div[id=reach-me] {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 0.25rem;
+
+    & > a {
+      font-size: 0;
+      height: 48px;
+      width: 48px;
+      border-radius: 0.5rem;
+
+      background: $gray700;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  @media(min-width: 1024px) {
+    width: 244px;
+    height: 448px;
+  }
+}
