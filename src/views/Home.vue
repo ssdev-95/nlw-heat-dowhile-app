@@ -2,38 +2,12 @@
 <div class="home">
 	<Badge v-if="badge.isOpen" />
 	<Header />
-	<div class="message-list">
-		<div class="message-card">
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at ornare ante.</p>
-			<div @click="toggleBadge">
-				<img
-					src="https://github.com/xSallus.png"
-          alt="user-29384399292939rjdj"
-				/>
-				<p>xSallus</p>
-			</div>
-		</div>
-		<div class="message-card">
-			<p>Ut luctus posuere luctus. Nulla ac risus efficitur, posuere sem a, vestibulum mauris.</p>
-			<div @click="toggleBadge">
-				<img
-					src="https://github.com/xSallus.png"
-					alt="user-29384399292939rjdj"
-		    />
-				<p>xSallus</p>
-			</div>
-		</div>
-		<div class="message-card">
-			<p>Dev bugadinho :D</p>
-			<div @click="toggleBadge">
-				<img
-					src="https://github.com/xSallus.png"
-					alt="user-29384399292939rjdj"
-				/>
-				<p>xSallus</p>
-			</div>
-		</div>
-	</div>
+	<Message
+		v-for="message in messages"
+		:message="message"
+		:press="toggleBadge"
+		:key="message.id"
+	/>
 	<form class="message-form" @submit="handleSubmit">
 		<textarea
 			required
@@ -57,19 +31,19 @@ import {
 import { useStore } from 'vuex';
 import Badge from '@/components/badge.vue';
 import Header from '@/components/header.vue';
-import { key } from '../types';
+import Message from '@/components/message.vue'
+import { IMessage, key } from '@/types';
 // @ is an alias to /src
 
 type FormFunction = (ev:any) => void;
 
 export default {
-  components: { Badge, Header },
+  components: { Badge, Header, Message },
 	setup() {
+		let messages = [] as IMessage[]
 		const store = useStore(key)
 		onBeforeMount(()=>{
-			alert(
-			  `(${store.getters.messages.length}) messages`
-			)
+			messages = store.getters.messages
 		})
 		const badge = reactive({ isOpen: false});
 		const message = reactive({ text: '' })
@@ -90,7 +64,8 @@ export default {
 			toggleBadge,
 			badge,
 			handleChange,
-			handleSubmit
+			handleSubmit,
+			messages
 		};
 	}
 }
@@ -119,54 +94,6 @@ export default {
 			gap: 1.5rem;
 
 			padding: 2rem;
-
-			& > .message-card {
-				width: 18rem;
-				word-wrap: break-word;
-
-				padding: 0.45rem;
-
-				display: flex;
-				flex-direction: column;
-				align-items: flex-start;
-				gap: 1rem;
-
-				color: $WHITE;
-				border-bottom: 1px solid $YELLOW;
-				border-radius: 0.5rem;
-
-				&:nth-child(2) {
-					align-self: flex-end;
-				}
-
-				& > p {
-					text-align: justify;
-					text-justify: inter-word;
-				}
-
-				& > div {
-					width: 100%;
-					display: flex;
-					gap: 1rem;
-					align-items: center;
-
-					color: $GRAY100;
-
-					& > img {
-						height: 1.7rem;
-						width: 1.7rem;
-						border-radius: 100%;
-						position: relative;
-
-						&::after {
-							content: "";
-							width: 2rem;
-							height: 2rem;
-							position: absolute;
-						}
-					}
-				}
-			}
 		}
 	}
 
