@@ -2,12 +2,17 @@
 <div class="home">
 	<Badge v-if="badge.isOpen" />
 	<Header />
-	<Message
-		v-for="message in messages"
-		:message="message"
-		:press="toggleBadge"
-		:key="message.id"
-	/>
+	<div v-if="messages" class="message-list">
+	  <Message
+   		v-for="message in messages"
+			:message="message"
+			:press="toggleBadge"
+			:key="message.id"
+  	/>
+  </div>
+	<div v-else class="empty-messages">
+		<p>No messages yet</p>
+	</div>
 	<form class="message-form" @submit="handleSubmit">
 		<textarea
 			required
@@ -94,6 +99,20 @@ export default {
 			gap: 1.5rem;
 
 			padding: 2rem;
+		}
+
+		& > .empty-messages {
+			display: flex;       
+			width: 100%;   
+			height: calc(88vh);     
+			justify-content: center;   
+			align-items: center;
+
+			& > p {
+				font-weight: 500;
+				font-size: 2rem;
+				color: $YELLOW;
+			}
 		}
 	}
 
