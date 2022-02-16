@@ -1,10 +1,10 @@
 <template>
 <div class="message-card">
-  <p>{{message.text}}</p>
-  <div @click="press">
+  <p>Lol</p>
+  <div>
     <img                                                  
-			:src="message.user.avatar_url"            
-			:alt="id"
+			src="https://github.com/xSallus.png"            
+		  alt="xSalus"
 		/>
 		<p>xSallus</p>		
 	</div>
@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, onBeforeMount } from 'vue'
 import { IMessage } from '@/types'
 
 export default defineComponent({
@@ -26,10 +26,10 @@ export default defineComponent({
 			required: true
 		},
 	},
-	setup({ message, press }) {
-		const id = `user-${message.user.github_id}`
-		alert(id)
-		return { id, message, press }
+	setup(props) {
+		//const id = `user-${message.user.github_id}`
+		onBeforeMount(()=>alert(props.message.text))
+		return {}
 	}
 })
 </script>

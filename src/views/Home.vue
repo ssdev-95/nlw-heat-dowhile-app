@@ -3,12 +3,23 @@
 	<Badge v-if="badge.isOpen" />
 	<Header />
 	<div v-if="messages" class="message-list">
-	  <Message
-   		v-for="message in messages"
-			:message="message"
-			:press="toggleBadge"
-			:key="message.id"
-  	/>
+		<!-- Begin card -->
+		<div v-for="message in messages">
+	  <div
+			:key="new Date.getTime()"
+  	  class="message-card"
+		>
+			<p>Lol</p>
+			<div>
+				<img 
+					src="https://github.com/xSallus.png" 
+					alt="xSalus"   
+				/>
+				<p>xSallus</p>
+			</div>
+		</div>
+		</div>
+		<!-- End card -->
   </div>
 	<div v-else class="empty-messages">
 		<p>No messages yet</p>
@@ -36,14 +47,14 @@ import {
 import { useStore } from 'vuex';
 import Badge from '@/components/badge.vue';
 import Header from '@/components/header.vue';
-import Message from '@/components/message.vue'
+//import Message from '@/components/message.vue'
 import { IMessage, key } from '@/types';
 // @ is an alias to /src
 
 type FormFunction = (ev:any) => void;
 
 export default {
-  components: { Badge, Header, Message },
+  components: { Badge, Header },
 	setup() {
 		let messages = [] as IMessage[]
 		const store = useStore(key)
@@ -153,6 +164,51 @@ export default {
 			border-radius: 0.5rem;
 			border: 0;
 			background: $YELLOW;
+		}
+	}
+
+	.message-card {
+		width: 18rem;  
+		word-wrap: break-word; 
+		padding: 0.45rem; 
+		display: flex;  
+		flex-direction: column;
+		align-items: flex-start; 
+		gap: 1rem;
+		color: $WHITE;  
+		border-bottom: 1px solid $YELLOW;
+		border-radius: 0.5rem;
+
+		&:nth-child(2) {                                    
+			align-self: flex-end; 
+		}
+		
+		& > p {     
+			text-align: justify;  
+			text-justify: inter-word;   
+		}
+
+		& > div {   
+			width: 100%;     
+			display: flex;
+			gap: 1rem;
+			align-items: center;
+    
+			color: $GRAY100;                                      
+  
+			& > img {     
+				height: 1.7rem;    
+				width: 1.7rem;       
+				border-radius: 100%;		
+				position: relative;
+
+				&::after {       
+					content: "";        
+					width: 2rem;        
+					height: 2rem;         
+	  			position: absolute;    
+				}
+			}
 		}
 	}
 </style>
