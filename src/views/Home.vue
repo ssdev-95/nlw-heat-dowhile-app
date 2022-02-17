@@ -4,27 +4,26 @@
 	<Header />
 	<div v-if="messages" class="message-list">
 		<!-- Begin card -->
-		<div v-for="message in messages">
 	  <div
-			:key="new Date.getTime()"
+			v-for="message in messages.list"
+			:key="message.id"
   	  class="message-card"
 		>
-			<p>Lol</p>
-			<div>
+			<p>{{message.text}}</p>
+			<div @click="toggleBadge">
 				<img 
-					src="https://github.com/xSallus.png" 
-					alt="xSalus"   
+					:src="message.user.avatar_url"
+					:alt="'user-'+message.user.github_id"   
 				/>
-				<p>xSallus</p>
+				<p>{{message.user.login}}</p>
 			</div>
-		</div>
 		</div>
 		<!-- End card -->
   </div>
 	<div v-else class="empty-messages">
 		<p>No messages yet</p>
 	</div>
-	<form class="message-form" @submit="handleSubmit">
+	<!--<form class="message-form" @submit="handleSubmit">
 		<textarea
 			required
 			row="3"
@@ -36,7 +35,8 @@
 		<button type="submit">
 			Send message
 		</button>
-	</form>
+	</form>-->
+	<MessageBox />
 </div>
 </template>
 
@@ -47,19 +47,22 @@ import {
 import { useStore } from 'vuex';
 import Badge from '@/components/badge.vue';
 import Header from '@/components/header.vue';
-//import Message from '@/components/message.vue'
+import MessageBox from '@/components/message.vue'
 import { IMessage, key } from '@/types';
 // @ is an alias to /src
 
 type FormFunction = (ev:any) => void;
+interface IReactive {
+	list: IMessage[];
+}
 
 export default {
-  components: { Badge, Header },
+  components: { Badge, Header, MessageBox },
 	setup() {
-		let messages = [] as IMessage[]
+		let messages = reactive({ list: [] }) as IReactive
 		const store = useStore(key)
 		onBeforeMount(()=>{
-			messages = store.getters.messages
+			messages.list = [...store.getters.messages] || []
 		})
 		const badge = reactive({ isOpen: false});
 		const message = reactive({ text: '' })
@@ -209,6 +212,31 @@ export default {
 	  			position: absolute;    
 				}
 			}
+		}
+	}
+
+	.login-button {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		align-items: center;
+
+		height: 3rem;
+		padding: 0.5rem;
+		width: 12rem;
+		background: $PINK;
+		border: 0;
+		border-radius: 0.5rem;
+
+		transform: translateY(-2.5rem);
+
+		/*& > img {
+			filter: invert(100%);
+		}*/
+
+		& > span {
+			color: $WHITE;
+			font-size: 1rem;
 		}
 	}
 </style>

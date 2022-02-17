@@ -1,88 +1,50 @@
 <template>
-<div class="message-card">
-  <p>Lol</p>
-  <div>
-    <img                                                  
-			src="https://github.com/xSallus.png"            
-		  alt="xSalus"
-		/>
-		<p>xSallus</p>		
-	</div>
-</div>
+<form
+	v-if="!!authToken"
+	class="message-form"
+	@submit="handleSubmit"
+>
+	<textarea      
+		required      
+		rows="3"    
+		maxlength=" 90"     
+		placeholder="Your message here :D"    
+		name="message" 
+		@change="handleChange"  
+	/>    
+  <button type="submit">Send message</button>
+</form>
+<button v-else class="login-button">
+	<img
+		src="@/assets/alternate-icons/github.svg"
+		alt="github icon" 
+	/>
+	<span>Login with Github</span>
+</button>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, onBeforeMount } from 'vue'
-import { IMessage } from '@/types'
-
+import {
+	defineComponent, onBeforeMount, reactive
+} from 'vue'
+const auth_url = 'https://github.com/login/oauth/authorize?scope=user&client_id=${process.env.VUE_APP_GITHUB_CLIENT_ID}'
 export default defineComponent({
-	props: {
-		message: {
-		  type: (Object as PropType<IMessage>),
-			required: true
-		},
-		press: {
-			type: (Function as PropType<()=>void>),
-			required: true
-		},
-	},
-	setup(props) {
-		//const id = `user-${message.user.github_id}`
-		onBeforeMount(()=>alert(props.message.text))
-		return {}
+	props:{},
+	setup() {
+	  onBeforeMount(()=>localStorage.setItem('@DoWhile:Token','wifjfjskaaa'))
+
+		let authToken = localStorage.getItem('@DoWhile:Token')
+		const message = reactive({ text: '' })
+
+		function handleChange(event:Event) {
+			const target = event.target as HTMLInputElement
+			message.text = target.value
+		}
+		function handleSubmit(event:Event) {
+			event.preventDefault()
+			alert(message.text)
+		}
+		return { handleChange, handleSubmit, authToken }
 	}
 })
 </script>
-
-<style lang="scss" >
-@import "../assets/colors.scss";
-
-.message-card {
-	width: 18rem;
-	word-wrap: break-word;
-
-	padding: 0.45rem;
-
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 1rem;
-
-	color: $WHITE;
-	border-bottom: 1px solid $YELLOW;
-	border-radius: 0.5rem;
-
-	&:nth-child(2) {
-		align-self: flex-end;
-	}
-
-	& > p {
-		text-align: justify;
-		text-justify: inter-word;   
-	}
-
-	& > div {
-		width: 100%;           
-		display: flex;
-		gap: 1rem;
-		align-items: center;  
-
-		color: $GRAY100;                          
-
-		& > img {
-			height: 1.7rem;         
-			width: 1.7rem;           
-			border-radius: 100%;             
-			position: relative;
-
-			&::after {      
-				content: "";  
-				width: 2rem;            
-				height: 2rem;
-				position: absolute;         
-			}        
-		}
-	}
-}
-</style>
-
