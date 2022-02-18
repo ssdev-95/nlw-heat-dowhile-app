@@ -7,16 +7,32 @@
 	/>
 	<div class="profile-pic">
 		<img
+			v-if="!auth"
 			src="@/assets/default-icons/me.svg"
 			alt="profile pic"
+		/>
+		<img
+			v-else
+			:src="user.avatar_url"
+			class="user_pic"
+			alt="profile pic"                             
 		/>
 	</div>
 </header>
 </template>
 
 <script>
+import { useStore } from 'vuex'
+import { key } from '@/types'
 export default {
-	setup() {}
+	setup() {
+		const store = useStore(key)
+		const auth = store.getters.authState
+		const user = store.getters.user
+		alert(`isLogged: ${auth}`)
+
+		return { auth, user }
+	}
 }
 </script>
 

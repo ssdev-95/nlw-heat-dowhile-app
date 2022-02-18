@@ -27,7 +27,7 @@
 import {
 	defineComponent, onBeforeMount, reactive, inject
 } from 'vue'
-const auth_url = 'https://github.com/login/oauth/authorize?scope=user&client_id=${process.env.VUE_APP_GITHUB_CLIENT_ID}'
+
 export default defineComponent({
 	setup() {
 	  //onBeforeMount(()=>localStorage.setItem('@DoWhile:Token','wifjfjskaaa'))

@@ -1,6 +1,12 @@
 <template>
-<div class="overlay" >
-	<div class="modal">
+<!--<div
+	class="overlay" 
+	:class="{ 'hidden':!props.isOpen }"
+>-->
+	<div
+	  class="modal"
+		:class="{ 'hidden':!props.isOpen }"
+	>
 		<form @submit="submit">
 			<label id="zap">
 				Whatsapp
@@ -75,16 +81,25 @@
 			</div>
 		</form>
 	</div>
-</div>
+<!--</div>-->
 </template>
 
 <script lang="ts" >
 import { inject, defineComponent, reactive } from 'vue'
+
 const store_token = '@DoWhile:user-social-media'
+
+const auth_url = `https://github.com/login/oauth/authorize?scope=user&client_id=${process.env.VUE_APP_GITHUB_CLIENT_ID}`
 
 type CloseModal = ()=>void;
 export default defineComponent({
-  setup () {
+	props: {
+		isOpen: {
+			type: Boolean,
+			required: true
+		}
+	},
+  setup (props) {
 		let userSocial = reactive({
 			zap: '',
 			linkedin: '',
@@ -124,11 +139,12 @@ export default defineComponent({
 			target.reset()
 			close()
 			setTimeout(()=>{
-				alert(localStorage.getItem(store_token))
-			}, 750)
+				//alert(localStorage.getItem(store_token))
+			  alert(auth_url)
+			}, 1000)
 		}
 
-		return { close, change, submit, focusInOut }
+		return { close, change, submit, focusInOut, props }
 	}
 })
 </script>
@@ -149,14 +165,6 @@ export default defineComponent({
 	justify-content: center;
 
 	background: rgba(0,0,0, .68);
-
-	&.hidden {
-	  display: none;
-
-		& > .modal {
-			bottom: -0;
-		}
-	}
 }
 
 .modal {
@@ -167,12 +175,24 @@ export default defineComponent({
 	max-height: 65vh;
 	padding: 2rem;
 
+	position: fixed;
+	left: 0;
+	bottom: 0;
+
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
 
+	transform: translateY(0%);
+
+
+	&.hidden {
+		transform: translateY(100%);
+	}
+
 	background: $BLACK-ALT-REVERSE;
 	border-radius: 32px 32px 0 0;
+	transition: all 2s cubic-bezier(0.7, 0.7, 0.7, 0.7);
 
 	& form {
 		width: 100%;
