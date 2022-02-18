@@ -25,18 +25,12 @@
 
 <script lang="ts">
 import {
-	defineComponent, onBeforeMount, reactive, PropType
+	defineComponent, onBeforeMount, reactive, inject
 } from 'vue'
 const auth_url = 'https://github.com/login/oauth/authorize?scope=user&client_id=${process.env.VUE_APP_GITHUB_CLIENT_ID}'
 export default defineComponent({
-	props:{
-		open: {
-			type: (Function as PropType<()=>void>),
-			required: true
-		}
-	},
-	setup({ open }) {
-	  onBeforeMount(()=>localStorage.setItem('@DoWhile:Token','wifjfjskaaa'))
+	setup() {
+	  //onBeforeMount(()=>localStorage.setItem('@DoWhile:Token','wifjfjskaaa'))
 
 		let authToken = localStorage.getItem('@DoWhile:Token')
 		const message = reactive({ text: '' })
@@ -49,6 +43,8 @@ export default defineComponent({
 			event.preventDefault()
 			alert(message.text)
 		}
+
+		const open = inject('toggleModal')
 		return { handleChange, handleSubmit, authToken, open }
 	}
 })

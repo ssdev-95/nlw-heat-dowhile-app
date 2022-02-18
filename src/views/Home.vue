@@ -23,8 +23,8 @@
 	<div v-else class="empty-messages">
 		<p>No messages yet</p>
 	</div>
-	<MessageBox @open="toggleModal" />
-	<Modal v-if="modal.isOpen" @close="toggleModal" />
+	<MessageBox />
+	<Modal v-if="modal.isOpen" />
 </div>
 </template>
 
@@ -54,7 +54,7 @@ export default {
 			messages.list = [...store.getters.messages] || []
 		})
 		const badge = reactive({ isOpen: false})
-		const modal = reactive({ isOpen: false})
+		const modal = reactive({ isOpen: true})
 		const message = reactive({ text: '' })
 		function toggleBadge() {
 			const state = !badge.isOpen;
@@ -73,6 +73,7 @@ export default {
 		}
 
 		provide('toggle', toggleBadge);
+		provide('toggleModal', toggleModal)
 		return {
 			toggleBadge,
 			toggleModal,

@@ -2,29 +2,65 @@
 <div class="overlay" >
 	<div class="modal">
 		<form @submit="submit">
-			<label>
-				+55 (DDD)
-				<input name="zap" @change="change" />
+			<label id="zap">
+				Whatsapp
+				<input
+				  name="zap"
+					placeholder="+55 (11) 2123-1015"
+					@change="change"
+					@focus="focusInOut"
+					@blur="focusInOut"
+				/>
 			</label>
-			<label>
-				linkedin.com/in/
-				<input name="linkedin" @change="change" />
+			<label id="linkedin">
+				Linkedin
+				<input
+				  name="linkedin"
+					placeholder="https://linkedin.com/in/aushahshu"
+					@change="change"
+					@focus="focusInOut"
+					@blur="focusInOut"
+				/>
 			</label>
-			<label>
-				instagram.com/
-				<input name="instagram" @change="change" />
+			<label id="instagram">
+				Instagram
+				<input
+					name="instagram"
+					placeholder="https://instagram.com/ahsuahsua"
+					@change="change"
+					@focus="focusInOut"
+					@blur="focusInOut"
+				/>
 			</label>
-			<label>
-			  rocketseat.com.br/me/
-				<input name="rocketseat" @change="change" />
+			<label id="rocketseat">
+			  Rocketseat
+				<input
+					name="rocketseat"
+					placeholder="https://rocketseat.com.br/me/aushahshu"
+					@change="change"
+					@focus="focusInOut"
+					@blur="focusInOut"
+				/>
 			</label>
-			<label>
-				twitter.com/
-				<input name="twitter" @change="change" />
+			<label id="twitter">
+				Twitter
+				<input
+					name="twitter"
+					placeholder="https://twitter.com/aushahshu"
+					@change="change"
+					@focus="focusInOut"
+					@blur="focusInOut"
+				/>
 			</label>
-			<label>
-				mailto:
-				<input name="mail" @change="change" />
+			<label id="mail">
+				e-Mail
+				<input
+					name="mail"
+					placeholder="aushahshu@domain.com"
+					@change="change"
+					@focus="focusInOut"
+					@blur="focusInOut"
+				/>
 			</label>
 			<div class="actions">
 				<button
@@ -43,17 +79,12 @@
 </template>
 
 <script lang="ts" >
-import { PropType, defineComponent, reactive } from 'vue'
+import { inject, defineComponent, reactive } from 'vue'
 const store_token = '@DoWhile:user-social-media'
 
+type CloseModal = ()=>void;
 export default defineComponent({
-  props: {
-	  close: {
-			type: (Function as PropType<()=>void>),
-			required: true
-		}
-	},
-	setup ({ close }) {
+  setup () {
 		let userSocial = reactive({
 			zap: '',
 			linkedin: '',
@@ -63,11 +94,22 @@ export default defineComponent({
 			mail: ''
 		})
 
+		const close = inject('toggleModal') as CloseModal
+
+		function focusInOut (event:Event) {
+			const { name } = event.target as HTMLInputElement
+			const input = document!.querySelector(
+			  `label#${name}`
+			)
+
+			input!.classList.toggle('focus')
+		}
+
 		function change (event: Event) {
 			const { name, value } = event.target as HTMLInputElement
 			userSocial = {
 				...userSocial,
-				[name]: value
+				[name]: value.length ? value : null
 			}
 
 			localStorage.setItem(
@@ -78,10 +120,15 @@ export default defineComponent({
 
 		function submit (event: Event) {
 			event.preventDefault()
-			alert(localStorage.getItem(store_token))
+			const target = event.target as HTMLFormElement
+			target.reset()
+			close()
+			setTimeout(()=>{
+				alert(localStorage.getItem(store_token))
+			}, 750)
 		}
 
-		return { close, change, submit }
+		return { close, change, submit, focusInOut }
 	}
 })
 </script>
@@ -102,49 +149,114 @@ export default defineComponent({
 	justify-content: center;
 
 	background: rgba(0,0,0, .68);
+
+	&.hidden {
+	  display: none;
+
+		& > .modal {
+			bottom: -0;
+		}
+	}
 }
 
 .modal {
 	width: 500px;
-	max-width: 100px;
+	max-width: 100vw;
 
 	height: 720px;
-	max-height: 80vh;
+	max-height: 65vh;
 	padding: 2rem;
 
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
 
-	background: $GRAY400;
+	background: $BLACK-ALT-REVERSE;
 	border-radius: 32px 32px 0 0;
 
 	& form {
 		width: 100%;
 		height: 100%;
+		padding: 1rem;
+
+		display: flex;
+		flex-direction: column;
+	
+		align-items: center;
+		justify-content: space-around;
 
 		& label {
 			width: 100%;
-			height: 2.5rem;
+			height: 2.75rem;
+			padding: 0 0.5rem;
 
 			display: flex;
 			align-items: center;
-			justify-content: center;
+			justify-content: flex-start;
 			gap: 1rem;
 
-			background: $GRAY200;
+			background: inherit;
+			border: 1px solid $YELLOW;
+	
+			color: $YELLOW;
+			font-size: 0.89rem;
+			text-align: left;
+			border-radius: 8px;
+
+			&.focus {
+				border-color:$PINK;
+				color: $GREEN;
+			}
 
 			& input {
 				height: inherit;
-				width: 50%;
+				width: 70%;
 
 				background: inherit;
 				border: 0;
 				outline: 0;
 
-				&::focus {
+				color: $YELLOW;
+
+				&:autofill,
+				&:-webkit-autofill {
+					background: inherit;
+					color: $GREEN;
+				}
+
+			  &::placeholder {
+					color: $YELLOW;
+				}
+
+				&:focus {
 					outline: 0;
+					color: $PINK;
 			  }
+
+				&:not(:focus) {
+					color: $YELLOW;
+				}
+			}
+		}
+
+		& .actions {
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+
+			& button {
+				width: 6rem;
+				height: 2.75rem;
+				background: inherit;
+				border: 2px solid $PINK;
+				color: $PINK;
+				font-size: 1.25rem;
+				border-radius: 8px;
+
+				&[type=submit] {
+					color: $GREEN;
+					border: 2px solid $GREEN;
+				}
 			}
 		}
 	}
