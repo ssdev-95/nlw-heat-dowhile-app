@@ -15,21 +15,3 @@ $BLACK: #09090A;
 $BLACK-ALT: #121214;
 $BLACK-ALT-REVERSE: #202024;
 
-@key-frames SlideUp {
-	from {
-		bottom: -100%;
-	}
-	to {
-		bottom: 0;
-	}
-}
-
-@key-frames SlideDown {	
-	from {  
-		bottom: -100%; 
-	}
-
-	to {
-		bottom: 0;
-	}
-}

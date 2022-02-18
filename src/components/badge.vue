@@ -72,40 +72,22 @@
 </template>
 
 <script lang="ts">
-import { inject } from 'vue'
+import { defineComponent, inject } from 'vue'
+import { useStore } from 'vuex'
+import { key } from '@/types'
 import Link from './link.vue'
 
-interface ISocial {
-	linkedin: string | null;
-	instagram: string | null;
-	zap: string | null;
-	mail: string | null;
-	twitter: string | null;
-	rocket: string | null
-}
-
-interface IUser {
-	id: number;
-	name: string;
-	login: string;
-	avatar_url: string;
-	github_id: number;
-	bio: string;
-	social: ISocial;
-}
-
-type IToggleFunction = () => void;
-
-export default {
+export default defineComponent({
   components: { Link },
 	setup() {
-		const toggle = inject('toggle') as IToggleFunction;
-		const store = inject('store') as any;
-    const user = store.getters.user as IUser;
+		const toggle = inject('toggleBadge')
+		const store = useStore(key)
+
+    const user = store.getters.user
 
 		return { user, toggle }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">
@@ -127,6 +109,7 @@ $BG: $BLACK-ALT;
 	left: 0;
 
 	z-index: 5;
+	animation: SHOW_UP 2s 1 cubic-bezier(0.7, 0.7, 0.7, 0.7);
 
 	& > .gradient {
 	  width: 100%;
@@ -222,6 +205,16 @@ $BG: $BLACK-ALT;
 
 	@media(min-width:1024px) {
 		filter: sepia(1) hue-rotate(-0.25turn);
+	}
+}
+
+@key-frames SHOW_UP {
+	from: {
+		opacity: 0;
+	}
+
+	to: {
+		opacity: 1;
 	}
 }
 </style>

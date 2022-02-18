@@ -65,7 +65,11 @@ export default defineComponent({
 	}
 
 	&:disabled {
-		filter: invert(100%);
+		background: $BLACK;
+		
+		& > img {
+			filter: invert(10%);
+		}
 	}
 
 	&:not(:disabled) {

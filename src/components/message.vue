@@ -1,4 +1,5 @@
 <template>
+<div class="wrapper">
 <form
 	v-if="!!authToken"
 	class="message-form"
@@ -21,6 +22,7 @@
 	/>
 	<span>Login with Github</span>
 </button>
+</div>
 </template>
 
 <script lang="ts">
@@ -49,3 +51,14 @@ export default defineComponent({
 	}
 })
 </script>
+
+<style lang="scss">
+.wrapper {
+  height: fit-content;
+	width: fit-content;
+
+	@media(min-width:1024px) {
+		display: none;
+	}
+}
+</style>

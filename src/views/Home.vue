@@ -48,12 +48,12 @@ interface IReactive {
 export default {
   components: { Badge, Header, MessageBox, Modal },
 	setup() {
-		let messages = reactive({ list: [] }) as IReactive
+		const messages = reactive({ list: [] }) as IReactive
 		const store = useStore(key)
 		onBeforeMount(()=>{
 			messages.list = [...store.getters.messages] || []
 		})
-		const badge = reactive({ isOpen: false})
+		const badge = reactive({ isOpen: true})
 		const modal = reactive({ isOpen: false})
 		const message = reactive({ text: '' })
 		function toggleBadge() {
@@ -72,7 +72,7 @@ export default {
 			alert(message.text)
 		}
 
-		provide('toggle', toggleBadge);
+		provide('toggleBadge', toggleBadge);
 		provide('toggleModal', toggleModal)
 		return {
 			toggleBadge,
