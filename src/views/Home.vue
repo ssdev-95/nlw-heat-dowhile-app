@@ -23,20 +23,8 @@
 	<div v-else class="empty-messages">
 		<p>No messages yet</p>
 	</div>
-	<!--<form class="message-form" @submit="handleSubmit">
-		<textarea
-			required
-			row="3"
-			maxlength="	90"
-			placeholder="Your message here :D"
-			name="message"
-			@change="handleChange"
-		/>
-		<button type="submit">
-			Send message
-		</button>
-	</form>-->
-	<MessageBox />
+	<MessageBox @open="toggleModal" />
+	<Modal v-if="modal.isOpen" @close="toggleModal" />
 </div>
 </template>
 
@@ -48,6 +36,7 @@ import { useStore } from 'vuex';
 import Badge from '@/components/badge.vue';
 import Header from '@/components/header.vue';
 import MessageBox from '@/components/message.vue'
+import Modal from '@/components/modal.vue'
 import { IMessage, key } from '@/types';
 // @ is an alias to /src
 
@@ -57,18 +46,23 @@ interface IReactive {
 }
 
 export default {
-  components: { Badge, Header, MessageBox },
+  components: { Badge, Header, MessageBox, Modal },
 	setup() {
 		let messages = reactive({ list: [] }) as IReactive
 		const store = useStore(key)
 		onBeforeMount(()=>{
 			messages.list = [...store.getters.messages] || []
 		})
-		const badge = reactive({ isOpen: false});
+		const badge = reactive({ isOpen: false})
+		const modal = reactive({ isOpen: false})
 		const message = reactive({ text: '' })
 		function toggleBadge() {
 			const state = !badge.isOpen;
 			badge.isOpen = state;
+		}
+		function toggleModal() {
+			const state = !modal.isOpen;
+			modal.isOpen = state;
 		}
 		const handleChange:FormFunction = (ev) => {
 			message.text = ev.target.value
@@ -81,7 +75,9 @@ export default {
 		provide('toggle', toggleBadge);
 		return {
 			toggleBadge,
+			toggleModal,
 			badge,
+			modal,
 			handleChange,
 			handleSubmit,
 			messages
