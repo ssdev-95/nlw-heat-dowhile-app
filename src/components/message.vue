@@ -14,7 +14,7 @@
 	/>    
   <button type="submit">Send message</button>
 </form>
-<button v-else class="login-button">
+<button v-else class="login-button" @click="open">
 	<img
 		src="@/assets/alternate-icons/github.svg"
 		alt="github icon" 
@@ -25,12 +25,17 @@
 
 <script lang="ts">
 import {
-	defineComponent, onBeforeMount, reactive
+	defineComponent, onBeforeMount, reactive, PropType
 } from 'vue'
 const auth_url = 'https://github.com/login/oauth/authorize?scope=user&client_id=${process.env.VUE_APP_GITHUB_CLIENT_ID}'
 export default defineComponent({
-	props:{},
-	setup() {
+	props:{
+		open: {
+			type: (Function as PropType<()=>void>),
+			required: true
+		}
+	},
+	setup({ open }) {
 	  onBeforeMount(()=>localStorage.setItem('@DoWhile:Token','wifjfjskaaa'))
 
 		let authToken = localStorage.getItem('@DoWhile:Token')
@@ -44,7 +49,7 @@ export default defineComponent({
 			event.preventDefault()
 			alert(message.text)
 		}
-		return { handleChange, handleSubmit, authToken }
+		return { handleChange, handleSubmit, authToken, open }
 	}
 })
 </script>
