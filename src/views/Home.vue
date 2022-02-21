@@ -33,7 +33,7 @@ import {
 	reactive, provide, inject, onBeforeMount, onMounted
 } from 'vue';
 import { useStore } from 'vuex';
-import api from '../api';
+import api from '@/api';
 import Badge from '@/components/badge.vue';
 import Header from '@/components/header.vue';
 import MessageBox from '@/components/message.vue'
@@ -50,8 +50,22 @@ const endpoint = 'messages/last_3'
 export default {
   components: { Badge, Header, MessageBox, Modal },
 	setup() {
-		const messages = reactive({ list: [] }) as IReactive
 		const store = useStore(key)
+  	const query = this.$route.query
+		const code = query?.code
+		const messages = reactive({ list: [] }) as IReactive
+		const badge = reactive({ isOpen: false})
+		const modal = reactive({ isOpen: false})
+		const message = reactive({ text: '' })
+
+		if (!!code) {
+		  const social = JSON.parse('@DoWhile:user-social-media')
+			api.post('authenticate', { code, social }).then(res=>{
+				store.dispatch('toggleAuthState')
+				store.dispatch('login', {user: res.data})
+			})
+		}
+
 		onBeforeMount(()=>{
 			api.get(endpoint).then(res=>{
 				store.dispatch('retrieveMessagesFromDb', {messages:res.data})
@@ -61,9 +75,7 @@ export default {
 			messages.list = [...store.getters.messages] || [];
 			alert(messages.list.length);
 		})
-		const badge = reactive({ isOpen: false})
-		const modal = reactive({ isOpen: false})
-		const message = reactive({ text: '' })
+
 		function toggleBadge() {
 			const state = !badge.isOpen;
 			badge.isOpen = state;
