@@ -4,32 +4,34 @@ import { Store } from 'vuex';
 export interface ISocial {
   linkedin: string|null;
 	instagram: string|null;
-	zap: string|null;
+	whatsapp: string|null;
 	mail: string|null;
  	twitter: string|null;
-  rocket: string|null;
+  rocketseat: string|null;
 }
 
 export interface IUser {
-	id?: number;
-	github_id: number;
+	id: string;
 	login: string;
-  name?: string;
+  name: string;
  	avatar_url: string;
-	bio?: string;
-  social?: ISocial;
+	bio: string;
+  social: ISocial;
 }
 
 export interface IMessage {
-	id: number;
+	id: string;
 	text: string;
-	user: IUser;
-	created_at: string;
+	user: Omit<IUser, 'id' | 'name' | 'bio' | 'social'>;
+}
+
+export type IMessageResponse = Omit<IMessage, 'user'> & {
+	user_id: string;
 }
 
 export interface State {
   authState: boolean;
-  user: IUser;
+  user: IUser | null;
 	messages: IMessage[];
 }
 

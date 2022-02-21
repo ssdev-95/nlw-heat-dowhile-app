@@ -30,9 +30,10 @@
 
 <script lang="ts">
 import {
-	reactive, provide, inject, onBeforeMount
+	reactive, provide, inject, onBeforeMount, onMounted
 } from 'vue';
 import { useStore } from 'vuex';
+import api from '../api';
 import Badge from '@/components/badge.vue';
 import Header from '@/components/header.vue';
 import MessageBox from '@/components/message.vue'
@@ -45,15 +46,22 @@ interface IReactive {
 	list: IMessage[];
 }
 
+const endpoint = 'messages/last_3'
 export default {
   components: { Badge, Header, MessageBox, Modal },
 	setup() {
 		const messages = reactive({ list: [] }) as IReactive
 		const store = useStore(key)
 		onBeforeMount(()=>{
-			messages.list = [...store.getters.messages] || []
+			api.get(endpoint).then(res=>{
+				store.dispatch('retrieveMessagesFromDb', {messages:res.data})
+			})
 		})
-		const badge = reactive({ isOpen: true})
+		onMounted(()=>{
+			messages.list = [...store.getters.messages] || [];
+			alert(messages.list.length);
+		})
+		const badge = reactive({ isOpen: false})
 		const modal = reactive({ isOpen: false})
 		const message = reactive({ text: '' })
 		function toggleBadge() {

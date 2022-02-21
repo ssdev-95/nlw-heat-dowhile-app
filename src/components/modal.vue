@@ -138,10 +138,11 @@ export default defineComponent({
 			const target = event.target as HTMLFormElement
 			target.reset()
 			close()
+		  
 			setTimeout(()=>{
 				//alert(localStorage.getItem(store_token))
-			  alert(auth_url)
-			}, 1000)
+			  window.location.href = auth_url
+			}, 1500)
 		}
 
 		return { close, change, submit, focusInOut, props }

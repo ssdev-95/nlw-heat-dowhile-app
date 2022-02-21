@@ -43,7 +43,7 @@
 					alt="twitter icon"
 				/>
 				<Link
-		  		:href="user.social.zap"
+		  		:href="user.social.whatsapp"
 				  src="whats.svg"
 					alt="whatsapp icon"
 				/>
@@ -53,7 +53,7 @@
 					alt="mail icon"
 				/>
 				<Link
-				  :href="user.social.rocket"
+				  :href="user.social.rocketseat"
 				  src="rocketseat.svg" 
 					alt="rocketseat icon" 
 				/>

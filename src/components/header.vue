@@ -29,7 +29,7 @@ export default {
 		const store = useStore(key)
 		const auth = store.getters.authState
 		const user = store.getters.user
-		alert(`isLogged: ${auth}`)
+		//alert(`isLogged: ${auth}`)
 
 		return { auth, user }
 	}
