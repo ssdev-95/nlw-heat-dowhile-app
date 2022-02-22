@@ -2,7 +2,7 @@
 <div class="home">
 	<Badge v-if="badge.isOpen" />
 	<Header />
-	<Messages	v-if="messages.length" />
+	<Messages	v-if="hasMessages" />
 	<div v-else class="empty-messages">
 		<p>No messages yet</p>
 	</div>
@@ -11,21 +11,25 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-	reactive, provide, inject, onBeforeMount, onMounted
-} from 'vue';
-import { useStore } from 'vuex';
-import { useRouter, useRoute } from 'vue-router';
+	reactive, 
+	provide, 
+	inject, 
+	onBeforeMount, 
+	watchEffect
+} from 'vue'
 
-import Badge from '@/components/badge.vue';
-import Header from '@/components/header.vue';
+import { useStore } from 'vuex'
+
+import Badge from '@/components/badge.vue'
+import Header from '@/components/header.vue'
 import MessageBox from '@/components/message.vue'
 import Modal from '@/components/modal.vue'
 import Messages from '@/components/message.list.vue'
 
-import api from '@/api';
-import { IMessage, key } from '@/types';
+import api from '@/api'
+import { IMessage, key } from '@/types'
 // @ is an alias to /src
 
 type FormFunction = (ev:any) => void;
@@ -34,63 +38,58 @@ interface IReactive {
 }
 
 const endpoint = 'messages/last_3'
-export default {
-  components: {
-		Badge, Header, MessageBox, Modal, Messages
-	},
-	setup() {
-		const store = useStore(key)
-		const route = useRoute()
-  	const query = route.query
-		const code = query?.code
-		const messages = store.getters.messages
-		const badge = reactive({ isOpen: false})
-		const modal = reactive({ isOpen: false})
-		const message = reactive({ text: '' })
 
-		if (!!code) {
-		  const social = JSON.parse('@DoWhile:user-social-media')
-			api.post('authenticate', { code, social }).then(res=>{
-				store.dispatch('toggleAuthState')
-				store.dispatch('login', {user: res.data})
-				alert(!!res.data.login)
-			})
-		}
+const store = useStore(key)
 
-		onBeforeMount(async () => {
-			const { data } = await api.get(endpoint)
-			store.dispatch('retrieveMessagesFromDb', {messages:data})
-		})
+const hasMessages = store.getters.has_messages
+const badge = reactive({ isOpen: false })
+const modal = reactive({ isOpen: false })
+const message = reactive({ text: '' })
 
-		function toggleBadge() {
-			const state = !badge.isOpen;
-			badge.isOpen = state;
-		}
-		function toggleModal() {
-			const state = !modal.isOpen;
-			modal.isOpen = state;
-		}
-		const handleChange:FormFunction = (ev) => {
-			message.text = ev.target.value
-		}
-		const handleSubmit:FormFunction = (ev) => {
-			ev.preventDefault()
-			alert(message.text)
-		}
+watchEffect(() => {
+	const code = window.location.search.replace('?code=', '')
+	
+	history.replaceState('', document.title, '/#/')
 
-		provide('toggleBadge', toggleBadge);
-		provide('toggleModal', toggleModal)
-		return {
-			toggleBadge,
-			toggleModal,
-			badge,
-			modal,
-			handleChange,
-			handleSubmit,
-			messages
-		};
-	}
+  if (!!code.length) {
+   	const social = JSON.parse('@DoWhile:user-social-media')
+
+  	api.post('authenticate', { code, social })
+		.then(({ data }) => {
+  		store.dispatch('toggleAuthState')
+			localStorage.setItem('@DoWhile:token', data.token)
+  		store.dispatch('login', {user: data.user})
+  		alert(data.user.login)
+  	})
+  }
+})
+
+onBeforeMount(async () => {
+	const { data } = await api.get(endpoint)
+	store.dispatch('retrieveMessagesFromDb', {messages:data})
+})
+
+function toggleBadge() {
+	const state = !badge.isOpen;
+	badge.isOpen = state;
 }
+
+function toggleModal() {
+	const state = !modal.isOpen;
+	modal.isOpen = state;
+}
+
+const handleChange:FormFunction = (ev) => {
+	message.text = ev.target.value
+}
+	
+const handleSubmit:FormFunction = (ev) => {
+	ev.preventDefault()
+	alert(message.text)
+}
+
+provide('toggleBadge', toggleBadge);
+provide('toggleModal', toggleModal)
 </script>
 
 <style lang="scss">

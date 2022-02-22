@@ -1,7 +1,7 @@
 <template>
 <div class="wrapper">
 <form
-	v-if="!!authToken"
+	v-if="authState"
 	class="message-form"
 	@submit="handleSubmit"
 >
@@ -27,10 +27,13 @@
 
 <script setup lang="ts">
 import { reactive, inject } from 'vue'
+import { useStore } from 'vuex'
+import { key } from '@/types'
 
-//onBeforeMount(()=>localStorage.setItem('@DoWhile:Token','wifjfjskaaa'))
+const store = useStore(key)
+const authState = store.getters.auth_state
+//let authToken = localStorage.getItem('@DoWhile:token')
 
-let authToken = localStorage.getItem('@DoWhile:Token')
 const message = reactive({ text: '' })
 
 function handleChange(event:Event) {

@@ -37,6 +37,9 @@ export default createStore<State>({
 		messages (state) {
 			return state.messages
 		},
+		has_messages (state) {
+			return !!state.messages.length
+		},
 		auth_state (state) {
 			return state.authState;
 		},
