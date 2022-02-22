@@ -25,31 +25,25 @@
 </div>
 </template>
 
-<script lang="ts">
-import {
-	defineComponent, onBeforeMount, reactive, inject
-} from 'vue'
+<script setup lang="ts">
+import { reactive, inject } from 'vue'
 
-export default defineComponent({
-	setup() {
-	  //onBeforeMount(()=>localStorage.setItem('@DoWhile:Token','wifjfjskaaa'))
+//onBeforeMount(()=>localStorage.setItem('@DoWhile:Token','wifjfjskaaa'))
 
-		let authToken = localStorage.getItem('@DoWhile:Token')
-		const message = reactive({ text: '' })
+let authToken = localStorage.getItem('@DoWhile:Token')
+const message = reactive({ text: '' })
 
-		function handleChange(event:Event) {
-			const target = event.target as HTMLInputElement
-			message.text = target.value
-		}
-		function handleSubmit(event:Event) {
-			event.preventDefault()
-			alert(message.text)
-		}
+function handleChange(event:Event) {
+	const target = event.target as HTMLInputElement
+	message.text = target.value
+}
 
-		const open = inject('toggleModal')
-		return { handleChange, handleSubmit, authToken, open }
-	}
-})
+function handleSubmit(event:Event) {
+	event.preventDefault()
+	alert(message.text)
+}
+
+const open = inject('toggleModal')
 </script>
 
 <style lang="scss">

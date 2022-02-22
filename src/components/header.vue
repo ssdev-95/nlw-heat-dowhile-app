@@ -21,19 +21,13 @@
 </header>
 </template>
 
-<script>
+<script setup lang="ts">
 import { useStore } from 'vuex'
 import { key } from '@/types'
-export default {
-	setup() {
-		const store = useStore(key)
-		const auth = store.getters.authState
-		const user = store.getters.user
-		//alert(`isLogged: ${auth}`)
 
-		return { auth, user }
-	}
-}
+const store = useStore(key)	
+const auth = store.getters.authState
+const user = store.getters.user
 </script>
 
 <style scoped lang="scss">

@@ -18,26 +18,16 @@
 	</button>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
+<script setup lang="ts">
 interface ILinkProps {
   src: string;
 	alt: string;
 	href: string|null;
 }
 
-export default defineComponent({
-  props: {
-	  src: String,
-		alt: String,
-		href: String
-	},
-	setup(props) {
-  	const icon = require(`@/assets/alternate-icons/${props.src}`)
-    return { props, icon }
-	}
-})
+const props = defineProps<ILinkProps>()
+
+const icon = require(`@/assets/alternate-icons/${props.src}`)
 </script>
 
 <style scoped lang="scss">

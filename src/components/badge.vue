@@ -71,23 +71,15 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject } from 'vue'
+<script setup lang="ts">
+import { inject } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '@/types'
 import Link from './link.vue'
-
-export default defineComponent({
-  components: { Link },
-	setup() {
-		const toggle = inject('toggleBadge')
-		const store = useStore(key)
-
-    const user = store.getters.user
-
-		return { user, toggle }
-  }
-})
+	
+const toggle = inject('toggleBadge')
+const store = useStore(key)
+const user = store.getters.user
 </script>
 
 <style scoped lang="scss">

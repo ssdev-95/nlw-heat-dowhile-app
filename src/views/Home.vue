@@ -2,24 +2,7 @@
 <div class="home">
 	<Badge v-if="badge.isOpen" />
 	<Header />
-	<div v-if="messages" class="message-list">
-		<!-- Begin card -->
-	  <div
-			v-for="message in messages.list"
-			:key="message.id"
-  	  class="message-card"
-		>
-			<p>{{message.text}}</p>
-			<div @click="toggleBadge">
-				<img 
-					:src="message.user.avatar_url"
-					:alt="'user-'+message.user.github_id"   
-				/>
-				<p>{{message.user.login}}</p>
-			</div>
-		</div>
-		<!-- End card -->
-  </div>
+	<Messages	v-if="messages.length" />
 	<div v-else class="empty-messages">
 		<p>No messages yet</p>
 	</div>
@@ -33,11 +16,15 @@ import {
 	reactive, provide, inject, onBeforeMount, onMounted
 } from 'vue';
 import { useStore } from 'vuex';
-import api from '@/api';
+import { useRouter, useRoute } from 'vue-router';
+
 import Badge from '@/components/badge.vue';
 import Header from '@/components/header.vue';
 import MessageBox from '@/components/message.vue'
 import Modal from '@/components/modal.vue'
+import Messages from '@/components/message.list.vue'
+
+import api from '@/api';
 import { IMessage, key } from '@/types';
 // @ is an alias to /src
 
@@ -48,12 +35,15 @@ interface IReactive {
 
 const endpoint = 'messages/last_3'
 export default {
-  components: { Badge, Header, MessageBox, Modal },
+  components: {
+		Badge, Header, MessageBox, Modal, Messages
+	},
 	setup() {
 		const store = useStore(key)
-  	const query = this.$route.query
+		const route = useRoute()
+  	const query = route.query
 		const code = query?.code
-		const messages = reactive({ list: [] }) as IReactive
+		const messages = store.getters.messages
 		const badge = reactive({ isOpen: false})
 		const modal = reactive({ isOpen: false})
 		const message = reactive({ text: '' })
@@ -63,17 +53,13 @@ export default {
 			api.post('authenticate', { code, social }).then(res=>{
 				store.dispatch('toggleAuthState')
 				store.dispatch('login', {user: res.data})
+				alert(!!res.data.login)
 			})
 		}
 
-		onBeforeMount(()=>{
-			api.get(endpoint).then(res=>{
-				store.dispatch('retrieveMessagesFromDb', {messages:res.data})
-			})
-		})
-		onMounted(()=>{
-			messages.list = [...store.getters.messages] || [];
-			alert(messages.list.length);
+		onBeforeMount(async () => {
+			const { data } = await api.get(endpoint)
+			store.dispatch('retrieveMessagesFromDb', {messages:data})
 		})
 
 		function toggleBadge() {

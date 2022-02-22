@@ -84,70 +84,61 @@
 <!--</div>-->
 </template>
 
-<script lang="ts" >
-import { inject, defineComponent, reactive } from 'vue'
+<script setup lang="ts" >
+import { inject, reactive } from 'vue'
 
 const store_token = '@DoWhile:user-social-media'
-
 const auth_url = `https://github.com/login/oauth/authorize?scope=user&client_id=${process.env.VUE_APP_GITHUB_CLIENT_ID}`
 
 type CloseModal = ()=>void;
-export default defineComponent({
-	props: {
-		isOpen: {
-			type: Boolean,
-			required: true
-		}
-	},
-  setup (props) {
-		let userSocial = reactive({
-			zap: '',
-			linkedin: '',
-			instagram: '',
-			rocketseat: '',
-			twitter: '',
-			mail: ''
-		})
+interface IModalProps {
+	isOpen: Boolean
+}
 
-		const close = inject('toggleModal') as CloseModal
+const props = defineProps<IModalProps>()
 
-		function focusInOut (event:Event) {
-			const { name } = event.target as HTMLInputElement
-			const input = document!.querySelector(
-			  `label#${name}`
-			)
-
-			input!.classList.toggle('focus')
-		}
-
-		function change (event: Event) {
-			const { name, value } = event.target as HTMLInputElement
-			userSocial = {
-				...userSocial,
-				[name]: value.length ? value : null
-			}
-
-			localStorage.setItem(
-			  store_token,
-				JSON.stringify(userSocial)
-			)
-		}
-
-		function submit (event: Event) {
-			event.preventDefault()
-			const target = event.target as HTMLFormElement
-			target.reset()
-			close()
-		  
-			setTimeout(()=>{
-				//alert(localStorage.getItem(store_token))
-			  window.location.href = auth_url
-			}, 1500)
-		}
-
-		return { close, change, submit, focusInOut, props }
-	}
+let userSocial = reactive({
+	zap: '',
+	linkedin: '',
+	instagram: '',
+	rocketseat: '',
+	twitter: '',
+	mail: ''
 })
+
+const close = inject('toggleModal') as CloseModal
+
+function focusInOut (event:Event) {
+	const { name } = event.target as HTMLInputElement
+	const input = document!.querySelector(`label#${name}`)
+
+	input!.classList.toggle('focus')
+}
+
+function change (event: Event) {
+	const { name, value } = event.target as HTMLInputElement
+	userSocial = {
+		...userSocial,
+		[name]: value.length ? value : null
+	}
+
+	localStorage.setItem(
+	  store_token,
+		JSON.stringify(userSocial)
+	)
+}
+
+function submit (event: Event) {
+	event.preventDefault()
+	const target = event.target as HTMLFormElement
+	target.reset()
+	close()
+
+	setTimeout(()=>{
+		//alert(localStorage.getItem(store_token))
+	  window.location.href = auth_url
+	}, 1500)
+}
 </script>
 
 <style lang="scss">
