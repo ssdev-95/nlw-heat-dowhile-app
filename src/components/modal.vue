@@ -98,12 +98,12 @@ interface IModalProps {
 const props = defineProps<IModalProps>()
 
 let userSocial = reactive({
-	zap: '',
-	linkedin: '',
-	instagram: '',
-	rocketseat: '',
-	twitter: '',
-	mail: ''
+	whatasapp: 'null',
+	linkedin: 'null',
+	instagram: 'null',
+	rocketseat: 'null',
+	twitter: 'null',
+	mail: 'null'
 })
 
 const close = inject('toggleModal') as CloseModal
