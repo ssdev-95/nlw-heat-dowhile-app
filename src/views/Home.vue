@@ -52,7 +52,7 @@ watchEffect(() => {
 	history.replaceState('', document.title, '/#/')
 
   if (!!code.length) {
-   	const social = JSON.parse('@DoWhile:user-social-media')
+   	const social = JSON.parse(localStorage.getItem('@DoWhile:user-social-media'))
 
   	api.post('authenticate', { code, social })
 		.then(({ data }) => {
