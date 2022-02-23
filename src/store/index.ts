@@ -12,7 +12,7 @@ export default createStore<State>({
 			const aux = !state.authState;
 			state.authState = aux;
 		},
-		RETREIVE_MSGS_FROM_DB (state, { messages }) {
+		RETRIEVE_MSGS_FROM_DB (state, { messages }) {
 			state.messages = [...messages];
 		},
 		LOGIN (state, { user }) {
@@ -24,7 +24,7 @@ export default createStore<State>({
 			ctx.commit('TOGGLE_AUTH_STATE');
 		},
 		retrieveMessagesFromDb (ctx, payload) {
-			ctx.commit('RETREIVE_MSGS_FROM_DB', payload);
+			ctx.commit('RETRIEVE_MSGS_FROM_DB', payload);
 		},
 		login (ctx, payload) {
 			ctx.commit('LOGIN', payload);

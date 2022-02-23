@@ -15,7 +15,6 @@
 import {
 	reactive, 
 	provide, 
-	inject, 
 	onBeforeMount, 
 	watchEffect
 } from 'vue'
@@ -28,46 +27,46 @@ import MessageBox from '@/components/message.vue'
 import Modal from '@/components/modal.vue'
 import Messages from '@/components/message.list.vue'
 
-import api from '@/api'
-import { IMessage, key } from '@/types'
-// @ is an alias to /src
-
-type FormFunction = (ev:any) => void;
-interface IReactive {
-	list: IMessage[];
-}
-
-const endpoint = 'messages/last_3'
+import { api } from '@/api'
+import { key } from '@/types'
 
 const store = useStore(key)
+
+const endpoint = 'messages/last_3'
+onBeforeMount(async () => {
+	const { data: resMsg } = await api.get(endpoint).catch(err => alert(err.message))
+	const messages = resMsg.map((msg) => {
+		let updated = { ...msg }
+		api.get('messages', { params: { author: msg.user_id } }).then(res => {
+			const user = res.data
+			updated = { ...updated, user }
+		})
+		return updated
+	})
+	console.log(messages)
+	store.dispatch('retrieveMessagesFromDb', { messages })
+})
 
 const hasMessages = store.getters.has_messages
 const badge = reactive({ isOpen: false })
 const modal = reactive({ isOpen: false })
-const message = reactive({ text: '' })
 
-watchEffect(() => {
+/*watchEffect(() => {
 	const code = window.location.search.replace('?code=', '')
-	
-	history.replaceState('', document.title, '/#/')
 
   if (!!code.length) {
+		history.replaceState('', document.title, '/#/')
    	const social = JSON.parse(localStorage.getItem('@DoWhile:user-social-media'))
 
-  	api.post('authenticate', { code, social })
-		.then(({ data }) => {
+  	api.post('authenticate', { code, social }).then(res => {
+			const { data } = res
   		store.dispatch('toggleAuthState')
 			localStorage.setItem('@DoWhile:token', data.token)
   		store.dispatch('login', {user: data.user})
   		alert(data.user.login)
-  	})
+  	}).catch(err => alert(err.message))
   }
-})
-
-onBeforeMount(async () => {
-	const { data } = await api.get(endpoint)
-	store.dispatch('retrieveMessagesFromDb', {messages:data})
-})
+})*/
 
 function toggleBadge() {
 	const state = !badge.isOpen;
@@ -77,15 +76,6 @@ function toggleBadge() {
 function toggleModal() {
 	const state = !modal.isOpen;
 	modal.isOpen = state;
-}
-
-const handleChange:FormFunction = (ev) => {
-	message.text = ev.target.value
-}
-	
-const handleSubmit:FormFunction = (ev) => {
-	ev.preventDefault()
-	alert(message.text)
 }
 
 provide('toggleBadge', toggleBadge);
@@ -231,10 +221,6 @@ provide('toggleModal', toggleModal)
 		border-radius: 0.5rem;
 
 		transform: translateY(-2.5rem);
-
-		/*& > img {
-			filter: invert(100%);
-		}*/
 
 		& > span {
 			color: $WHITE;

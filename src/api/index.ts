@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const baseURL = process.env.VUE_APP_API_HOST
+const domain = process.env.VUE_APP_API_HOST
+const baseURL = `https://${domain}/`
 
 const api = axios.create({ baseURL })
 // TODO: add token to requests if available
@@ -12,4 +13,4 @@ const api = axios.create({ baseURL })
   return Promise.reject(error);
 });*/
 
-export default api;
+export { api }

@@ -48,7 +48,7 @@
 					alt="whatsapp icon"
 				/>
 				<Link
-				  :href="'mailto:'+user.social.mail"
+				  :href="user.social.mail?'mailto:'+user.social.mail:null"
 			  	src="mail.svg"
 					alt="mail icon"
 				/>
@@ -79,7 +79,23 @@ import Link from './link.vue'
 	
 const toggle = inject('toggleBadge')
 const store = useStore(key)
-const user = store.getters.user
+//const user = store.getters.user
+const user = {
+	id: 19292882,
+	name: 'Salomao s.',
+	login: 'xSallus',
+	bio: 'Yet Another Great Dev',
+	avatar_url: 'https://github.com/xSallus.png',
+	social: {
+		whatsapp: null,
+		rocketseat: null,
+		linkedin: null,
+		twitter: null,
+		mail: null,
+		instagram: null
+	}
+
+}
 </script>
 
 <style scoped lang="scss">

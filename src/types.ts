@@ -22,7 +22,7 @@ export interface IUser {
 export interface IMessage {
 	id: string;
 	text: string;
-	user: Omit<IUser, 'id' | 'name' | 'bio' | 'social'>;
+	user: IUser;
 }
 
 export type IMessageResponse = Omit<IMessage, 'user'> & {
