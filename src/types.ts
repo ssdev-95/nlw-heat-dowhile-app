@@ -32,7 +32,7 @@ export type IMessageResponse = Omit<IMessage, 'user'> & {
 export interface State {
   authState: boolean;
   user: IUser | null;
-	messages: IMessage[];
+  messages: IMessage[];
 }
 
 export const key:InjectionKey<Store<State>> = Symbol();

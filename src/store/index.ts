@@ -13,7 +13,7 @@ export default createStore<State>({
 			state.authState = aux;
 		},
 		RETRIEVE_MSGS_FROM_DB (state, { messages }) {
-			state.messages = [...messages];
+			state.messages = messages;
 		},
 		LOGIN (state, { user }) {
 			state.user = user;

@@ -1,55 +1,62 @@
 <template>
-<div class="home">
-	<Badge v-if="badge.isOpen" />
-	<Header />
-	<Messages	v-if="hasMessages" />
-	<div v-else class="empty-messages">
-		<p>No messages yet</p>
-	</div>
-	<MessageBox />
-	<Modal :isOpen="modal.isOpen" />
-</div>
+  <div class="home">
+    <Badge v-if="badge.isOpen" />
+    <Header />
+    <Messages v-if="hasMessages.value" />
+    <div v-else class="empty-messages">
+      <p>No messages yet</p>
+    </div>
+    <MessageBox />
+    <Modal :isOpen="modal.isOpen" />
+  </div>
 </template>
 
 <script setup lang="ts">
-import {
-	reactive, 
-	provide, 
-	onBeforeMount, 
-	watchEffect
-} from 'vue'
+import { reactive, provide, onBeforeMount, watchEffect } from "vue";
 
-import { useStore } from 'vuex'
+import { useStore } from "vuex";
 
-import Badge from '@/components/badge.vue'
-import Header from '@/components/header.vue'
-import MessageBox from '@/components/message.vue'
-import Modal from '@/components/modal.vue'
-import Messages from '@/components/message.list.vue'
+import Badge from "@/components/badge.vue";
+import Header from "@/components/header.vue";
+import MessageBox from "@/components/message.vue";
+import Modal from "@/components/modal.vue";
+import Messages from "@/components/message.list.vue";
 
-import { api } from '@/api'
-import { key } from '@/types'
+import { api } from "@/api";
+import { IUser, IMessage, IMessageResponse as MessageResponse, key } from "@/types";
 
-const store = useStore(key)
+const store = useStore(key);
 
-const endpoint = 'messages/last_3'
+interface IMessageResponse {
+  data: MessageResponse[];
+}
+
+let hasMessages = reactive({value: false});
+
+const endpoint = "messages/last_3";
 onBeforeMount(async () => {
-	const { data: resMsg } = await api.get(endpoint).catch(err => alert(err.message))
-	const messages = resMsg.map((msg) => {
-		let updated = { ...msg }
-		api.get('messages', { params: { author: msg.user_id } }).then(res => {
-			const user = res.data
-			updated = { ...updated, user }
-		})
-		return updated
-	})
-	console.log(messages)
-	store.dispatch('retrieveMessagesFromDb', { messages })
-})
+  const { data: msgs } = await api
+    .get<IMessageResponse[]>(endpoint)
+    .catch((err) => console.log(err));
 
-const hasMessages = store.getters.has_messages
-const badge = reactive({ isOpen: false })
-const modal = reactive({ isOpen: false })
+  let messages: IMessage[] = [];
+
+  msgs.forEach((msg: MessageResponse) => {
+    api
+      .get<IUser>("messages", { params: { author: msg.user_id } })
+      .then(({ data: user }) => {
+        const updated = { ...msg, user };
+        messages.push(updated);
+      })
+      .catch((err) => console.log(err));
+  });
+  
+  store.dispatch("retrieveMessagesFromDb", { messages });
+  setTimeout(()=> { hasMessages.value = true }, 2000)
+});
+
+const badge = reactive({ isOpen: false });
+const modal = reactive({ isOpen: false });
 
 /*watchEffect(() => {
 	const code = window.location.search.replace('?code=', '')
@@ -69,162 +76,162 @@ const modal = reactive({ isOpen: false })
 })*/
 
 function toggleBadge() {
-	const state = !badge.isOpen;
-	badge.isOpen = state;
+  const state = !badge.isOpen;
+  badge.isOpen = state;
 }
 
 function toggleModal() {
-	const state = !modal.isOpen;
-	modal.isOpen = state;
+  const state = !modal.isOpen;
+  modal.isOpen = state;
 }
 
-provide('toggleBadge', toggleBadge);
-provide('toggleModal', toggleModal)
+provide("toggleBadge", toggleBadge);
+provide("toggleModal", toggleModal);
 </script>
 
 <style lang="scss">
-	@import "../assets/colors.scss";
-  .home {
-	  background: $BLACK;
-		height: 100vh;
-		width: 100vw;
+@import "../assets/colors.scss";
+.home {
+  background: $BLACK;
+  height: 100vh;
+  width: 100vw;
 
-		overflow-y: auto;
+  overflow-y: auto;
 
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-start;
-		align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 
-		& > .message-list {
-		  display: flex;
-			width: 100%;
-			height: calc(88vh);
-			flex-direction: column;
-			align-items: flex-start;
-			gap: 1.5rem;
+  & > .message-list {
+    display: flex;
+    width: 100%;
+    height: calc(88vh);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
 
-			padding: 2rem;
-		}
+    padding: 2rem;
+  }
 
-		& > .empty-messages {
-			display: flex;       
-			width: 100%;   
-			height: calc(88vh);     
-			justify-content: center;   
-			align-items: center;
+  & > .empty-messages {
+    display: flex;
+    width: 100%;
+    height: calc(88vh);
+    justify-content: center;
+    align-items: center;
 
-			& > p {
-				font-weight: 500;
-				font-size: 2rem;
-				color: $YELLOW;
-			}
-		}
-	}
+    & > p {
+      font-weight: 500;
+      font-size: 2rem;
+      color: $YELLOW;
+    }
+  }
+}
 
-	.message-form {
-		width: 100%;
-		height: 15rem;
-		padding: 0 2rem 2rem;
+.message-form {
+  width: 100%;
+  height: 15rem;
+  padding: 0 2rem 2rem;
 
-		display: flex;
-		flex-direction: column;
-	  gap: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
 
-		justify-self: flex-end;
+  justify-self: flex-end;
 
-		& > textarea {
-			width: 100%;
-			background: $GRAY400;
-			flex: 4;
-			border-radius: 0.5rem;
-			border: 0;
-			outline: 0;
-			padding: 0.25rem;
-			color: $GRAY100;
+  & > textarea {
+    width: 100%;
+    background: $GRAY400;
+    flex: 4;
+    border-radius: 0.5rem;
+    border: 0;
+    outline: 0;
+    padding: 0.25rem;
+    color: $GRAY100;
 
-			&::placeholder {
-				color: $GRAY100;
-			}
+    &::placeholder {
+      color: $GRAY100;
+    }
 
-			&:focus {
-				background: $GRAY400;
-				color: $PINK;
-			}
-		}
+    &:focus {
+      background: $GRAY400;
+      color: $PINK;
+    }
+  }
 
-		& > button {
-		  width: 100%;
-			flex: 2;
-			border-radius: 0.5rem;
-			border: 0;
-			background: $YELLOW;
-		}
-	}
+  & > button {
+    width: 100%;
+    flex: 2;
+    border-radius: 0.5rem;
+    border: 0;
+    background: $YELLOW;
+  }
+}
 
-	.message-card {
-		width: 18rem;  
-		word-wrap: break-word; 
-		padding: 0.45rem; 
-		display: flex;  
-		flex-direction: column;
-		align-items: flex-start; 
-		gap: 1rem;
-		color: $WHITE;  
-		border-bottom: 1px solid $YELLOW;
-		border-radius: 0.5rem;
+.message-card {
+  width: 18rem;
+  word-wrap: break-word;
+  padding: 0.45rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  color: $WHITE;
+  border-bottom: 1px solid $YELLOW;
+  border-radius: 0.5rem;
 
-		&:nth-child(2) {                                    
-			align-self: flex-end; 
-		}
-		
-		& > p {     
-			text-align: justify;  
-			text-justify: inter-word;   
-		}
+  &:nth-child(2) {
+    align-self: flex-end;
+  }
 
-		& > div {   
-			width: 100%;     
-			display: flex;
-			gap: 1rem;
-			align-items: center;
-    
-			color: $GRAY100;                                      
-  
-			& > img {     
-				height: 1.7rem;    
-				width: 1.7rem;       
-				border-radius: 100%;		
-				position: relative;
+  & > p {
+    text-align: justify;
+    text-justify: inter-word;
+  }
 
-				&::after {       
-					content: "";        
-					width: 2rem;        
-					height: 2rem;         
-	  			position: absolute;    
-				}
-			}
-		}
-	}
+  & > div {
+    width: 100%;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 
-	.login-button {
-		display: flex;
-		gap: 1rem;
-		justify-content: center;
-		align-items: center;
+    color: $GRAY100;
 
-		height: 3rem;
-		padding: 0.5rem;
-		width: 12rem;
-		background: $PINK;
-		border: 0;
-		border-radius: 0.5rem;
+    & > img {
+      height: 1.7rem;
+      width: 1.7rem;
+      border-radius: 100%;
+      position: relative;
 
-		transform: translateY(-2.5rem);
+      &::after {
+        content: "";
+        width: 2rem;
+        height: 2rem;
+        position: absolute;
+      }
+    }
+  }
+}
 
-		& > span {
-			color: $WHITE;
-			font-size: 1rem;
-		}
-	}
+.login-button {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+
+  height: 3rem;
+  padding: 0.5rem;
+  width: 12rem;
+  background: $PINK;
+  border: 0;
+  border-radius: 0.5rem;
+
+  transform: translateY(-2.5rem);
+
+  & > span {
+    color: $WHITE;
+    font-size: 1rem;
+  }
+}
 </style>
