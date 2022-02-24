@@ -8,8 +8,8 @@ yarn install
 ```
 ### Create a file called `.env` in the root of project with theese variables:
 
-~~VUE_APP_GITHUB_CLIENT_ID~~ -> Github OAuth Client ID
-~~VUE_APP_API_HOST~~ -> Url for backend of application
+**VUE_APP_GITHUB_CLIENT_ID** -> Github OAuth Client ID
+**VUE_APP_API_HOST** -> Url for backend of application
 
 
 > Refer to [NLWHeatDoWhileAppNode]() repo for intruction on how to setup and run the api consumed in this project..
@@ -22,4 +22,5 @@ yarn serve
 ```
 
 >> Enjoy :D
+
 ![dowhile](./src/assets/default-icons/dowhile.svg)
