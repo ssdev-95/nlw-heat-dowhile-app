@@ -72,15 +72,12 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '@/types'
+import { inject, onMounted, reactive } from 'vue'
 import Link from './link.vue'
 	
 const toggle = inject('toggleBadge')
-const store = useStore(key)
-//const user = store.getters.user
-const user = {
+
+let user = reactive({
 	id: 19292882,
 	name: 'Salomao s.',
 	login: 'xSallus',
@@ -94,8 +91,15 @@ const user = {
 		mail: null,
 		instagram: null
 	}
+})
 
-}
+onMounted(()=>{
+	const stored = localStorage.getItem('@DoWhile:user-badge')
+	const parsedUser = JSON.parse(stored)
+	user = parsedUser
+})
+
+setTimeout(()=>alert(user.login),1500)
 </script>
 
 <style scoped lang="scss">

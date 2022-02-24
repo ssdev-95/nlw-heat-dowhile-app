@@ -75,9 +75,14 @@ const modal = reactive({ isOpen: false });
   }
 })*/
 
-function toggleBadge() {
-  const state = !badge.isOpen;
-  badge.isOpen = state;
+function toggleBadge(user: IUser) {
+	const stringified = JSON.stringify(user)
+	localStorage.setItem('@DoWhile:user-badge', stringified)
+
+	setTimeout(() => {
+		const state = !badge.isOpen;
+		badge.isOpen = state;
+	}, 1000)
 }
 
 function toggleModal() {
