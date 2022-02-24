@@ -9,6 +9,7 @@ yarn install
 ### Create a file called `.env` in the root of project with theese variables:
 
 **VUE_APP_GITHUB_CLIENT_ID** -> Github OAuth Client ID
+
 **VUE_APP_API_HOST** -> Url for backend of application
 
 
