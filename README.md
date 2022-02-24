@@ -12,7 +12,7 @@ yarn install
 **VUE_APP_API_HOST** -> Url for backend of application
 
 
-> Refer to [NLWHeatDoWhileAppNode]() repo for intruction on how to setup and run the api consumed in this project..
+> Refer to [NLWHeatDoWhileAppNode](https://github.com/xSallus/nlw-heat-dowhile-node) repo for intruction on how to setup and run the api consumed in this project..
 
 After api has been setup and running, run the application..
 
