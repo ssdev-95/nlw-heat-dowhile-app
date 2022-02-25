@@ -72,12 +72,12 @@
 </template>
 
 <script setup lang="ts">
-import { inject, onMounted, reactive } from 'vue'
+import { inject, onMounted, reactive, toRefs } from 'vue'
 import Link from './link.vue'
 	
 const toggle = inject('toggleBadge')
 
-let user = reactive({
+let state = reactive({ user: {
 	id: 19292882,
 	name: 'Salomao s.',
 	login: 'xSallus',
@@ -91,15 +91,15 @@ let user = reactive({
 		mail: null,
 		instagram: null
 	}
-})
+}})
 
 onMounted(()=>{
 	const stored = localStorage.getItem('@DoWhile:user-badge')
 	const parsedUser = JSON.parse(stored)
-	user = parsedUser
+	state.user = parsedUser
 })
 
-setTimeout(()=>alert(user.login),1500)
+const { user } = toRefs(state)
 </script>
 
 <style scoped lang="scss">
