@@ -30,3 +30,22 @@ const store = useStore(key)
 const messages = store.getters.messages
 const toggleBadge = inject('toggleBadge') as ToggleFunction;
 </script>
+
+<style lang="scss">
+.message-card {
+	@media (max-width:860px) {
+		animation: SlideIn 1s 1 forwards;
+		animation-timing-function: cubic-bezier(0.7, 0.7, 0.7, 0.7);
+	}
+}
+
+@keyframes SlideIn {
+	from {
+		transform: translateX(-100vw);
+	}
+
+	to {
+		transform: translateX(0);
+	}
+}
+</style>
