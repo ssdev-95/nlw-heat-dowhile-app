@@ -58,22 +58,22 @@ onBeforeMount(async () => {
 const badge = reactive({ isOpen: false });
 const modal = reactive({ isOpen: false });
 
-/*watchEffect(() => {
-	const code = window.location.search.replace('?code=', '')
+const code = window.location.search.replace('?code=', '')
 
-  if (!!code.length) {
-		history.replaceState('', document.title, '/#/')
-   	const social = JSON.parse(localStorage.getItem('@DoWhile:user-social-media'))
+if (!!code.length) {
+	history.replaceState('', document.title, '/#/')
+	alert(code)
+  /*const social = JSON.parse(localStorage.getItem('@DoWhile:user-social-media'))
 
-  	api.post('authenticate', { code, social }).then(res => {
-			const { data } = res
-  		store.dispatch('toggleAuthState')
-			localStorage.setItem('@DoWhile:token', data.token)
-  		store.dispatch('login', {user: data.user})
-  		alert(data.user.login)
-  	}).catch(err => alert(err.message))
-  }
-})*/
+  api.post('authenticate', { code, social }).then(res => {
+		const { data } = res
+		localStorage.setItem('@DoWhile:token', data.token)
+
+		store.dispatch('toggleAuthState')
+  	store.dispatch('login', { user: data.user })
+  }).catch(err => alert(err.message))
+	*/
+}
 
 function toggleBadge(user: IUser) {
 	const stringified = JSON.stringify(user)

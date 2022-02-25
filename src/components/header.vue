@@ -22,12 +22,17 @@
 </template>
 
 <script setup lang="ts">
+//import { onUpdated, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '@/types'
 
 const store = useStore(key)	
 const auth = store.getters.authState
-const user = store.getters.user
+//const state = reactive({ user: store.getters.user })
+
+//onUpdated(()=>alert(auth))
+
+//const { user } = toRefs(state)
 </script>
 
 <style scoped lang="scss">
