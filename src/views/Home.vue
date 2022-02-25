@@ -23,7 +23,12 @@ import Modal from "@/components/modal.vue";
 import Messages from "@/components/message.list.vue";
 
 import { api } from "@/api";
-import { IUser, IMessage, IMessageResponse as MessageResponse, key } from "@/types";
+import {
+  IUser,
+	IMessage,
+	IMessageResponse as MessageResponse,
+	key
+} from "@/types";
 
 const store = useStore(key);
 
@@ -62,17 +67,16 @@ const code = window.location.search.replace('?code=', '')
 
 if (!!code.length) {
 	history.replaceState('', document.title, '/#/')
-	alert(code)
-  /*const social = JSON.parse(localStorage.getItem('@DoWhile:user-social-media'))
+
+  const social = JSON.parse(localStorage.getItem('@DoWhile:user-social-media'))
 
   api.post('authenticate', { code, social }).then(res => {
 		const { data } = res
-		localStorage.setItem('@DoWhile:token', data.token)
-
-		store.dispatch('toggleAuthState')
-  	store.dispatch('login', { user: data.user })
+		//localStorage.setItem('@DoWhile:token', data.token)
+		alert(data.token)
+		//store.dispatch('toggleAuthState')
+  	//store.dispatch('login', { user: data.user })
   }).catch(err => alert(err.message))
-	*/
 }
 
 function toggleBadge(user: IUser) {

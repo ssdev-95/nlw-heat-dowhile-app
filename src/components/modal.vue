@@ -98,12 +98,12 @@ interface IModalProps {
 const props = defineProps<IModalProps>()
 
 let userSocial = reactive({
-	whatasapp: 'null',
-	linkedin: 'null',
-	instagram: 'null',
-	rocketseat: 'null',
-	twitter: 'null',
-	mail: 'null'
+	whatasapp: null,
+	linkedin: null,
+	instagram: null,
+	rocketseat: null,
+	twitter: null,
+	mail: null
 })
 
 const close = inject('toggleModal') as CloseModal
@@ -133,6 +133,13 @@ function submit (event: Event) {
 	const target = event.target as HTMLFormElement
 	target.reset()
 	close()
+
+	const stored = localStorage.getItem(store_token)
+
+	if (!stored) {
+		const stringified = JSON.stringify(userSocial)
+		localStorage.setItem(store_token, stringified)
+	}
 
 	setTimeout(()=>{
 		//alert(localStorage.getItem(store_token))

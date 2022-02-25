@@ -33,6 +33,8 @@ const auth = store.getters.authState
 //onUpdated(()=>alert(auth))
 
 //const { user } = toRefs(state)
+//const token = localStorage.getItem('@DoWhile:token')
+//if (!!token.length) { alert(token) }
 </script>
 
 <style scoped lang="scss">
