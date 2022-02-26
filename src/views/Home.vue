@@ -69,12 +69,12 @@ if (!!code.length) {
 	history.replaceState('', document.title, '/#/')
 
   const social = JSON.parse(localStorage.getItem('@DoWhile:user-social-media'))
-	const data = { code, social }
+	const data = JSON.parse(JSON.stringify({ code, social }))
 
   api.post('authenticate', data).then(res => {
 		const { data: { user, token } } = res
 		//localStorage.setItem('@DoWhile:token', data.token)
-		alert(token)
+		alert('deu bom')
 		//store.dispatch('toggleAuthState')
   	//store.dispatch('login', { user })
   }).catch(err => alert(err.message))
