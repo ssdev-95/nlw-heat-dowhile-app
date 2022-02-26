@@ -8,10 +8,10 @@
 		:class="{ 'hidden':!props.isOpen }"
 	>
 		<form @submit="submit">
-			<label id="zap">
+			<label id="whatsapp">
 				Whatsapp
 				<input
-				  name="zap"
+				  name="whatsapp"
 					placeholder="+55 (11) 2123-1015"
 					@change="change"
 					@focus="focusInOut"
@@ -98,7 +98,7 @@ interface IModalProps {
 const props = defineProps<IModalProps>()
 
 let userSocial = reactive({
-	whatasapp: null,
+	whatsapp: null,
 	linkedin: null,
 	instagram: null,
 	rocketseat: null,
