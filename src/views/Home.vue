@@ -69,13 +69,14 @@ if (!!code.length) {
 	history.replaceState('', document.title, '/#/')
 
   const social = JSON.parse(localStorage.getItem('@DoWhile:user-social-media'))
+	const data = { code, social }
 
-  api.post('authenticate', { code, social }).then(res => {
-		const { data } = res
+  api.post('authenticate', data).then(res => {
+		const { data: { user, token } } = res
 		//localStorage.setItem('@DoWhile:token', data.token)
-		alert(data.token)
+		alert(token)
 		//store.dispatch('toggleAuthState')
-  	//store.dispatch('login', { user: data.user })
+  	//store.dispatch('login', { user })
   }).catch(err => alert(err.message))
 }
 
