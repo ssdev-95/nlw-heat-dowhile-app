@@ -22,19 +22,22 @@
 </template>
 
 <script setup lang="ts">
-//import { onUpdated, reactive, toRefs } from 'vue'
+import { onMounted, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '@/types'
 
 const store = useStore(key)	
-const auth = store.getters.authState
-//const state = reactive({ user: store.getters.user })
+let auth = false
+const state = reactive({ user: {} })
+const { user } = state
 
-//onUpdated(()=>alert(auth))
-
-//const { user } = toRefs(state)
-//const token = localStorage.getItem('@DoWhile:token')
-//if (!!token.length) { alert(token) }
+onMounted(() => {
+	const token = sessionStorage.getItem('@DoWhile:token')
+	auth = !!token
+	setTimeout(() => {
+	  alert(JSON.stringify(store.getters.user))
+	}, 500)
+})
 </script>
 
 <style scoped lang="scss">
@@ -49,6 +52,10 @@ const auth = store.getters.authState
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+
+	@media (min-width:1024px) {
+		justify-content: flex-start;
+	}
 }
 
 .logo {
@@ -71,6 +78,10 @@ const auth = store.getters.authState
 	& > img {
 		width: 75%;
 		height: 75%;
+	}
+
+	@media (min-width:1024px) {
+		display: none;
 	}
 }
 </style>

@@ -68,10 +68,16 @@ onBeforeMount(async () => {
 	  const social = JSON.parse(String(localStorage.getItem('@DoWhile:user-social-media')))
 		const data = JSON.parse(JSON.stringify({code, social}))
 
-	  const { data: authResponse } = await api
+	  const { data: { user, token } } = await api
 		  .post('authenticate', data)
 			.catch(err => alert(err.message))
-		// console.log(authResponse.token)
+
+		sessionStorage.setItem('@DoWhile:token', token)
+		
+		if (!!token.length) {
+		  store.dispatch('login', { user })
+			store.didpatch('toggleAuthState')
+		}
 	}
 });
 

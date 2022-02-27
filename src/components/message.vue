@@ -32,7 +32,7 @@ import { key } from '@/types'
 
 const store = useStore(key)
 const authState = store.getters.auth_state
-//let authToken = localStorage.getItem('@DoWhile:token')
+//let authToken = sessionStorage.getItem('@DoWhile:token')
 
 const message = reactive({ text: '' })
 
