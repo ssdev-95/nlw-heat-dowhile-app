@@ -64,15 +64,14 @@ onBeforeMount(async () => {
 
 	if (!!code.length) {
 		history.replaceState('', document.title, '/#/')
-		alert(code)
 
-	  /*const social = JSON.parse(localStorage.getItem('@DoWhile:user-social-media'))
+	  const social = JSON.parse(String(localStorage.getItem('@DoWhile:user-social-media')))
 		const data = JSON.parse(JSON.stringify({code, social}))
 
 	  const { data: authResponse } = await api
 		  .post('authenticate', data)
 			.catch(err => alert(err.message))
-		alert(authResponse.token)*/
+		// console.log(authResponse.token)
 	}
 });
 
