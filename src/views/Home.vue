@@ -5,6 +5,7 @@
     <Messages v-if="hasMessages.value" />
     <div v-else class="empty-messages">
       <p>No messages yet</p>
+			<Spinner />
     </div>
     <MessageBox />
     <Modal :isOpen="modal.isOpen" />
@@ -21,6 +22,7 @@ import Header from "@/components/header.vue";
 import MessageBox from "@/components/message.vue";
 import Modal from "@/components/modal.vue";
 import Messages from "@/components/message.list.vue";
+import Spinner from "@/components/spinner.vue";
 
 import { api } from "@/api";
 import {
@@ -130,10 +132,13 @@ provide("toggleModal", toggleModal);
 
   & > .empty-messages {
     display: flex;
+		flex-direction: column;
     width: 100%;
     height: calc(88vh);
     justify-content: center;
     align-items: center;
+
+		gap: 2rem;
 
     & > p {
       font-weight: 500;
