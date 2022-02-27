@@ -5,7 +5,10 @@ const baseURL = `https://${domain}/`
 
 const api = axios.create({
 	baseURL,
-  headers: { 'Content-Type': 'application/json' }
+  headers: {
+		'Content-Type': 'application/json',
+		'Access-Control-Allow-Origin': '*'
+	}
 })
 // TODO: add token to requests if available
 /*axios.interceptors.request.use(function (config) {

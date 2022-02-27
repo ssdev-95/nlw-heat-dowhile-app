@@ -58,27 +58,26 @@ onBeforeMount(async () => {
   
   store.dispatch("retrieveMessagesFromDb", { messages });
   setTimeout(()=> { hasMessages.value = true }, 2000)
+//});
+
+	const code = window.location.search.replace('?code=', '')
+
+	if (!!code.length) {
+		history.replaceState('', document.title, '/#/')
+		alert(code)
+
+	  /*const social = JSON.parse(localStorage.getItem('@DoWhile:user-social-media'))
+		const data = JSON.parse(JSON.stringify({code, social}))
+
+	  const { data: authResponse } = await api
+		  .post('authenticate', data)
+			.catch(err => alert(err.message))
+		alert(authResponse.token)*/
+	}
 });
 
 const badge = reactive({ isOpen: false });
 const modal = reactive({ isOpen: false });
-
-const code = window.location.search.replace('?code=', '')
-
-if (!!code.length) {
-	history.replaceState('', document.title, '/#/')
-
-  const social = JSON.parse(localStorage.getItem('@DoWhile:user-social-media'))
-	const data = JSON.parse(JSON.stringify({ code, social }))
-
-  api.post('authenticate', data).then(res => {
-		const { data: { user, token } } = res
-		//localStorage.setItem('@DoWhile:token', data.token)
-		alert('deu bom')
-		//store.dispatch('toggleAuthState')
-  	//store.dispatch('login', { user })
-  }).catch(err => alert(err.message))
-}
 
 function toggleBadge(user: IUser) {
 	const stringified = JSON.stringify(user)
