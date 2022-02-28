@@ -29,6 +29,7 @@
 import { reactive, ref, inject, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '@/types'
+import { api } from '@/api'
 
 const store = useStore(key)
 const authState = ref(false)
@@ -47,9 +48,21 @@ function handleChange(event:Event) {
 	message.text = target.value
 }
 
-function handleSubmit(event:Event) {
+async function handleSubmit(event:Event) {
+	const token = sessionStorage.getItem('@DoWhile:token')
+	const target = event.target as HTMLFormElement
 	event.preventDefault()
-	alert(message.text)
+	try {
+		const { data } = await api.post('messages', { message: message.text}, { headers: {
+			"Authorization": `Bearer ${token}`
+		}})
+
+		alert(JSON.stringify(data))
+	} catch (err) {
+		alert(err.message)
+	}
+
+	target.reset()
 }
 
 const open = inject('toggleModal')
