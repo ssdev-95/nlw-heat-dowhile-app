@@ -217,17 +217,20 @@ provide("toggleModal", toggleModal);
 
     color: $GRAY100;
 
-    & > img {
+    & > .user-pic {
       height: 1.7rem;
       width: 1.7rem;
       border-radius: 100%;
-      position: relative;
+			background: $GRADIENT;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 
-      &::after {
-        content: "";
-        width: 2rem;
-        height: 2rem;
-        position: absolute;
+      & > img {
+        width: 95%;
+        height: 95%;
+				border: 2px solid $GRAY400;
+				border-radius: inherit;
       }
     }
   }

@@ -8,10 +8,12 @@
 	>
 		<p>{{message.text}}</p>
 		<div @click="toggleBadge(message.user)">
-			<img
-				:src="message.user.avatar_url"
-				alt="'user-'+message.user.github_id"
-			/>
+			<div class="user-pic">
+				<img
+					:src="message.user.avatar_url"
+					alt="'user-'+message.user.github_id"
+				/>
+			</div>
       <p>{{message.user.login}}</p>
 		</div>
 	</div>
