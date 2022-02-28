@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import { reactive, provide, onBeforeMount, watchEffect } from "vue";
+import io from 'socket.io';
 
 import { useStore } from "vuex";
 
@@ -31,6 +32,11 @@ import {
 	IMessageResponse as MessageResponse,
 	key
 } from "@/types";
+
+const domain = process.env.VUE_APP_API_HOST
+const socket = io(`https://${domain}`)
+
+io.on('new_message', data => alert(JSON.stringify(data)))
 
 const store = useStore(key);
 
