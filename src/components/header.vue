@@ -33,6 +33,7 @@ import { onMounted, reactive, ref } from 'vue'
 import { useStore } from 'vuex'
 import Spinner from '@/components/spinner.vue'
 import { key } from '@/types'
+import { api } from '@/api'
 
 const store = useStore(key)	
 let auth = ref(false)
@@ -45,13 +46,24 @@ onMounted(() => {
 		const storedUser = store.getters.user
 		loading.value = true
 		if(!!token) {
-			state.user = storedUser
-			auth.value = true
+		  if(storedUser) {
+				state.user = storedUser
+				auth.value = true
+			} else {
+				api.get('profile', {
+					headers: {
+						"Authorization": `Bearer ${token}`
+					}
+				}).then(res => {
+					state.user = res.data
+					auth.value = true
+				})
+			}
 		}
 
 		setTimeout(() => {
 		  loading.value = false
-		}, 1000)
+		}, 1200)
 	}, 2000)
 })
 </script>
