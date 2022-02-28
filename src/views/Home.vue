@@ -36,7 +36,11 @@ import {
 const domain = process.env.VUE_APP_API_HOST
 const socket = io(`https://${domain}`)
 
-io.on('new_message', data => alert(JSON.stringify(data)))
+try {
+	socket.on('new_message', data => console.log(data))
+} catch (err) {
+	console.log(err)
+}
 
 const store = useStore(key);
 
