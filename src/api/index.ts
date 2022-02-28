@@ -1,4 +1,5 @@
 import axios from 'axios'
+import io from 'socket.io-client'
 
 const domain = process.env.VUE_APP_API_HOST
 const baseURL = `https://${domain}/`
@@ -19,4 +20,6 @@ const api = axios.create({
   return Promise.reject(error);
 });*/
 
-export { api }
+const socket = io(baseURL)
+
+export { api, socket }

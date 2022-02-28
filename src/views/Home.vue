@@ -14,7 +14,6 @@
 
 <script setup lang="ts">
 import { reactive, provide, onBeforeMount, watchEffect } from "vue";
-import io from 'socket.io';
 
 import { useStore } from "vuex";
 
@@ -25,7 +24,7 @@ import Modal from "@/components/modal.vue";
 import Messages from "@/components/message.list.vue";
 import Spinner from "@/components/spinner.vue";
 
-import { api } from "@/api";
+import { api, socket } from "@/api";
 import {
   IUser,
 	IMessage,
@@ -33,16 +32,21 @@ import {
 	key
 } from "@/types";
 
-const domain = process.env.VUE_APP_API_HOST
-const socket = io(`https://${domain}`)
+const store = useStore(key);
 
 try {
-	socket.on('new_message', data => console.log(data))
+	socket.on('new_message', data => {
+		const news = store
+		  .getters
+			.messages
+			.slice(1, 3)
+			.push(data)
+	  store.dispatch("retrieveMessagesFromDb", { messages: news });
+		alert(JSON.stringify(news[news.length - 1]))
+	})
 } catch (err) {
-	console.log(err)
+	alert(JSON.stringify(err))
 }
-
-const store = useStore(key);
 
 interface IMessageResponse {
   data: MessageResponse[];
@@ -54,7 +58,7 @@ const endpoint = "messages/last_3";
 onBeforeMount(async () => {
   const { data: msgs } = await api
     .get<IMessageResponse[]>(endpoint)
-    .catch((err) => console.log(err));
+    . catch((err) => console.log(err));
 
   let messages: IMessage[] = [];
 

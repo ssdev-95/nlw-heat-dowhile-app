@@ -53,11 +53,9 @@ async function handleSubmit(event:Event) {
 	const target = event.target as HTMLFormElement
 	event.preventDefault()
 	try {
-		const { data } = await api.post('messages', { message: message.text}, { headers: {
+		await api.post('messages', { message: message.text}, { headers: {
 			"Authorization": `Bearer ${token}`
 		}})
-
-		alert(JSON.stringify(data))
 	} catch (err) {
 		alert(err.message)
 	}
