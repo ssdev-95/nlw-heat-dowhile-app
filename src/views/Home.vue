@@ -249,6 +249,8 @@ provide("toggleModal", toggleModal);
   border: 0;
   border-radius: 0.5rem;
 
+	margin: 0 auto;
+
   transform: translateY(-2.5rem);
 
   & > span {

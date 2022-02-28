@@ -26,15 +26,21 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, inject } from 'vue'
+import { reactive, ref, inject, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { key } from '@/types'
 
 const store = useStore(key)
-const authState = store.getters.auth_state
-//let authToken = sessionStorage.getItem('@DoWhile:token')
+const authState = ref(false)
 
 const message = reactive({ text: '' })
+
+onMounted(() => {
+	setTimeout(() => {
+		const token = sessionStorage.getItem('@DoWhile:token')
+		authState.value = !!token
+	}, 2000)
+})
 
 function handleChange(event:Event) {
 	const target = event.target as HTMLInputElement
@@ -50,12 +56,27 @@ const open = inject('toggleModal')
 </script>
 
 <style lang="scss">
+.message-form,
+.login-button {
+	animation: SlideIn 2s 1 cubic-bezier(0.7,0.7,0.7,0.7);
+}
+
 .wrapper {
   height: fit-content;
-	width: fit-content;
+	width: 500px;
+	max-width: 95vw;
 
 	@media(min-width:1024px) {
 		display: none;
+	}
+}
+
+@keyframes SlideIn {
+	from {
+		transform: translateX(-100vw);
+	}
+	to {
+		transform: translateX(0);
 	}
 }
 </style>
