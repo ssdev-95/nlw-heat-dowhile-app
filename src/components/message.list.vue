@@ -35,16 +35,8 @@ const toggleBadge = inject('toggleBadge') as ToggleFunction;
 
 try {
 	socket.on('new_message', data => {
-	 	console.log('NewMessage':
-	  console.log(data)
-		if (messages.length == 3) {
-			const news = messages.slice(1, 3).push(data)
-			messages = [...news]
-		} else {
-			messages.push(data)
-		}
-		console.log('NewMessages:')
-		console.log(messages)
+		const news: any[] = [...messages.slice(1, 3), data]
+		store.dispatch('retrieveMessagesFromDb', { messages: news })
 	})
 } catch (err) {
 	alert(JSON.stringify(err))

@@ -92,7 +92,7 @@ onBeforeMount(async () => {
 		
 		if (!!token.length) {
 		  store.dispatch('login', { user })
-			store.didpatch('toggleAuthState')
+			store.dispatch('toggleAuthState')
 		}
 	}
 });
