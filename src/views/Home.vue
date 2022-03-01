@@ -24,7 +24,7 @@ import Modal from "@/components/modal.vue";
 import Messages from "@/components/message.list.vue";
 import Spinner from "@/components/spinner.vue";
 
-import { api, socket } from "@/api";
+import { api } from "@/api";
 import {
   IUser,
 	IMessage,
@@ -34,7 +34,7 @@ import {
 
 const store = useStore(key);
 
-try {
+/*try {
 	socket.on('new_message', data => {
 		const news = store
 		  .getters
@@ -46,7 +46,7 @@ try {
 	})
 } catch (err) {
 	alert(JSON.stringify(err))
-}
+}*/
 
 interface IMessageResponse {
   data: MessageResponse[];
