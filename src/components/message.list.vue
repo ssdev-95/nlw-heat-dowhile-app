@@ -28,15 +28,20 @@ import { socket } from '@/api'
 import { key, IUser } from '@/types'
 
 type ToggleFunction = (user: IUser) => void;
+type SpinnerFunction = () => void;
 
 const store = useStore(key)
 const messages = store.getters.messages
 const toggleBadge = inject('toggleBadge') as ToggleFunction;
+const toggleSpinner = inject("toggleSpinner") as SpinnerFunction;
 
 try {
 	socket.on('new_message', data => {
 		const news: any[] = [...messages.slice(1, 3), data]
 		store.dispatch('retrieveMessagesFromDb', { messages: news })
+		toggleSpinner()
+
+		setTimeout(()=>toggleSpinner(), 2000)
 	})
 } catch (err) {
 	alert(JSON.stringify(err))

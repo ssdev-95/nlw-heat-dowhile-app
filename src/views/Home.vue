@@ -4,7 +4,6 @@
     <Header />
     <Messages v-if="hasMessages.value" />
     <div v-else class="empty-messages">
-      <p>No messages yet</p>
 			<Spinner />
     </div>
     <MessageBox />
@@ -33,20 +32,6 @@ import {
 } from "@/types";
 
 const store = useStore(key);
-
-/*try {
-	socket.on('new_message', data => {
-		const news = store
-		  .getters
-			.messages
-			.slice(1, 3)
-			.push(data)
-	  store.dispatch("retrieveMessagesFromDb", { messages: news });
-		alert(JSON.stringify(news[news.length - 1]))
-	})
-} catch (err) {
-	alert(JSON.stringify(err))
-}*/
 
 interface IMessageResponse {
   data: MessageResponse[];
@@ -115,8 +100,13 @@ function toggleModal() {
   modal.isOpen = state;
 }
 
+function toggleSpinner() {
+	hasMessages.value = !hasMessages.value
+}
+
 provide("toggleBadge", toggleBadge);
 provide("toggleModal", toggleModal);
+provide("toggleSpinner", toggleSpinner);
 </script>
 
 <style lang="scss">
